@@ -27,7 +27,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     // 拦截所有路由
                     .match("/**")
                     // 排除登录接口
-                    .notMatch("/login", "/logout", "/register", "/captchaImage")
+                    .notMatch("/login", "/logout", "/register", "/captchaImage", "/test/**")
                     // 排除静态资源
                     .notMatch("/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**")
                     // 排除 Swagger

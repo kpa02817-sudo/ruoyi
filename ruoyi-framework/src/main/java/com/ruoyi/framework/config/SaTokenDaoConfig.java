@@ -3,7 +3,7 @@ package com.ruoyi.framework.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.dao.SaTokenDaoRedisJackson;
@@ -16,13 +16,15 @@ import cn.dev33.satoken.dao.SaTokenDaoRedisJackson;
 @Configuration
 public class SaTokenDaoConfig {
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisConnectionFactory redisConnectionFactory;
 
     /**
      * 配置 Sa-Token 持久层实现为 Redis
      */
     @Bean
     public SaTokenDao saTokenDao() {
-        return new SaTokenDaoRedisJackson();
+        SaTokenDaoRedisJackson dao = new SaTokenDaoRedisJackson();
+        dao.init(redisConnectionFactory);
+        return dao;
     }
 }
