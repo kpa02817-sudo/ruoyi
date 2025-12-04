@@ -49,8 +49,11 @@ const user = {
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
-          setToken(res.token)
-          commit('SET_TOKEN', res.token)
+          // 确保存储的token不包含Bearer前缀（setToken内部会处理，但这里也确保一下）
+          const token = res.token
+          setToken(token)
+          // 存储到state的token也应该是纯token（不含Bearer前缀）
+          commit('SET_TOKEN', getToken())
           resolve()
         }).catch(error => {
           reject(error)

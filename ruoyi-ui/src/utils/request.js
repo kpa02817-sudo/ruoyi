@@ -27,7 +27,13 @@ service.interceptors.request.use(config => {
   // 是否需要防止数据重复提交
   const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
   if (getToken() && !isToken) {
-    config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    // getToken()已经确保返回纯token（不含Bearer前缀），这里直接添加Bearer前缀
+    const token = getToken()
+    // 双重保险：确保token不包含Bearer前缀后再添加
+    const cleanToken = token && token.trim().startsWith('Bearer ') 
+      ? token.trim().replace(/^Bearer\s+/i, '').trim() 
+      : token
+    config.headers['Authorization'] = 'Bearer ' + cleanToken // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   // get请求映射params参数
   if (config.method === 'get' && config.params) {
